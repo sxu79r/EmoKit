@@ -1,12 +1,6 @@
-import sys, os, shutil, sqlite3
-from functools import partial
-from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
-                             QListWidget, QListWidgetItem, QInputDialog,
-                             QFileDialog, QMenu, QStackedWidget)
-from PyQt5.QtGui import QPixmap, QIcon, QPainter, QImage, QBrush, QColor, QFont
-from PyQt5.QtCore import Qt, QRect, QSize
-from qfluentwidgets import NavigationInterface, NavigationItemPosition, PushButton, NavigationWidget, FluentIcon as FIF
-from qframelesswindow import FramelessWindow
+import sys, os
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import Qt
 from gui.MainWindows import EmojiManager
 from core.LoadSettings import cfg
 

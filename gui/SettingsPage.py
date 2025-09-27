@@ -1,22 +1,13 @@
-from PyQt5.QtWidgets import QFileDialog, QInputDialog
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFileDialog, QInputDialog, QSlider
-from qfluentwidgets import (
-    SettingCardGroup, PushSettingCard, SwitchSettingCard, ColorSettingCard,
-    InfoBar, InfoBarPosition, FluentIcon as FIF, ScrollArea
-    )
-from PyQt5.QtWidgets import QSpacerItem, QSizePolicy
+from qfluentwidgets import SwitchSettingCard, ColorSettingCard
 import os
-from PyQt5.QtCore import QUrl
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFileDialog, QInputDialog, QSlider
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from qfluentwidgets import (
-    ScrollArea, SettingCardGroup, PushSettingCard, RangeSettingCard, InfoBar, InfoBarPosition, HyperlinkCard,
-    OptionsSettingCard, PrimaryPushSettingCard, FluentIcon as FIF,
+    ScrollArea, SettingCardGroup, PushSettingCard, InfoBar, InfoBarPosition,
+    PrimaryPushSettingCard, FluentIcon as FIF,
     )
-from PyQt5.QtCore import Qt, pyqtSignal, QUrl, QStandardPaths
+from PyQt5.QtCore import Qt, pyqtSignal, QUrl
 from PyQt5.QtGui import QDesktopServices
 
-from PyQt5.QtCore import Qt
 from core.LoadSettings import cfg  # 你写的Config类
 
 
@@ -57,6 +48,9 @@ class SettingPage(ScrollArea):
         cfg.Tray_State.valueChanged.connect(
             lambda state: self.settings_changed.emit("Tray_State", state)
         )
+        cfg.Hotkey.valueChanged.connect(
+            lambda state: self.settings_changed.emit("Hotkey", state)
+        )
 
     # -----------------------------
     # 路径设置
@@ -69,9 +63,10 @@ class SettingPage(ScrollArea):
             "表情保存路径",
             FIF.SAVE_AS,
             "点击打开所在目录",
-            cfg.get(cfg.EmojiSaved_Path),
+            cfg.EmojiSaved_Path.value,  # 如果你想显示初始值，可以用 .value
             parent=pathGroup
             )
+
         self.emojiPathCard.clicked.connect(self.__openEmojiPath)
 
         # 数据库路径卡片（仅查看）
@@ -136,18 +131,18 @@ class SettingPage(ScrollArea):
             )
 
         self.themeColorCard = ColorSettingCard(
-            cfg.ThemeColor,
+            cfg.ThemeColor,  # 直接传对象
             FIF.BRUSH,
             "主题颜色",
             "自定义界面主题颜色",
             parent=windowGroup
             )
-        # 当前快捷键
+
         self.hotkeyCard = SwitchSettingCard(
             FIF.UNIT,
             "启用窗口快捷键",
             f"快捷键: Shift+Ctrl+E",
-            cfg.get(cfg.Hotkey),
+            configItem=cfg.Hotkey,  # 直接传对象
             parent=windowGroup
             )
 

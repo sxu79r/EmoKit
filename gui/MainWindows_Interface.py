@@ -1,20 +1,13 @@
-from PyQt5.QtGui import QPixmap, QIcon, QPainter, QImage, QBrush, QColor, QFont
-from PyQt5.QtCore import Qt, QRect, QSize, QTimer, QRectF
-from PyQt5.QtWidgets import (
-    QHBoxLayout, QVBoxLayout, QStackedWidget, QMenu, QInputDialog, QListWidgetItem,
-    QFileDialog, QMessageBox, QLabel, QWidget, QApplication
-    )
-from qfluentwidgets import NavigationWidget
-from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit, PushButton, CaptionLabel
+from PyQt5.QtGui import QIcon, QPainter, QImage, QBrush, QColor, QFont
+from PyQt5.QtCore import Qt, QRect, QThread, pyqtSignal
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QWidget
 import keyboard
-from qfluentwidgets import NavigationInterface, NavigationItemPosition, FluentIcon as FIF, setTheme, Theme, \
-    PrimaryPushButton, setThemeColor, SearchLineEdit, MessageBox, PushButton
-from qframelesswindow import FramelessWindow, TitleBar
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QThread, pyqtSignal
-from .EmojiPage import EmojiPage, EmojiItemWidget
+from qfluentwidgets import FluentIcon as FIF, PrimaryPushButton, SearchLineEdit, MessageBoxBase, \
+    SubtitleLabel, LineEdit, \
+    CaptionLabel, NavigationWidget
+from qframelesswindow import TitleBar
+from .EmojiPage import EmojiPage
 from core.LoadSettings import cfg
-
 
 
 class AddEmojiGroupDialog(MessageBoxBase):
@@ -53,6 +46,7 @@ class AddEmojiGroupDialog(MessageBoxBase):
     def get_text(self):
         return self.inputLineEdit.text().strip()
 
+
 # 线程监听全局快捷键
 
 class HotkeyListener(QThread):
@@ -67,8 +61,9 @@ class HotkeyListener(QThread):
         keyboard.add_hotkey(self.current_hotkey, lambda: self.trigger.emit())
         keyboard.wait()
 
+
 class AvatarWidget(NavigationWidget):
-    def __init__(self, image_path=None, text='', parent=None,page=None):
+    def __init__(self, image_path=None, text='', parent=None, page=None):
         super().__init__(isSelectable=False, parent=parent)  # 必须传 isSelectable
         self.text = f'分组:{text}'
         self.avatar_path = image_path or ''

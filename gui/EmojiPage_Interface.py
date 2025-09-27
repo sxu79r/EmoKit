@@ -1,24 +1,11 @@
-from PyQt5.QtCore import QTimer
-import tempfile, shutil
-from PyQt5.QtWidgets import QMenu, QInputDialog
-from qfluentwidgets import PrimaryPushButton
-from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout
-from qfluentwidgets import ProgressBar, FluentIcon
-
-from qfluentwidgets import RoundMenu, Action, MenuAnimationType, FluentIcon as FIF
-from functools import partial
-from qfluentwidgets import StateToolTip
-from PyQt5.QtGui import QDrag, QPixmap, QMouseEvent, QPainter
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QDrag, QPixmap, QMovie, QPainter, QPen, QColor, QImage
 from PyQt5.QtCore import Qt, QMimeData, QPoint
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QMenu, QApplication
-from PyQt5.QtGui import QPixmap, QMovie, QPainter, QPen, QColor, QFont, QImage
-from PyQt5.QtCore import Qt, QSize, QEvent, QMimeData, QUrl
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListWidget, QApplication
+from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit, CaptionLabel
 import tempfile, shutil, os
-from functools import partial
-from core.EmojiDB import EmojiDB
 
-from qfluentwidgets import MessageBoxBase, SubtitleLabel, LineEdit, PushButton, CaptionLabel
-from PyQt5.QtGui import QColor
+from core.EmojiDB import EmojiDB
 
 class RenameEmojiDialog(MessageBoxBase):
     """Fluent 风格的重命名表情对话框"""

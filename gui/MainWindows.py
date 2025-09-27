@@ -1,29 +1,24 @@
-from PyQt5.QtGui import QPixmap, QIcon, QPainter, QImage, QBrush, QColor, QFont
-from PyQt5.QtCore import Qt, QRect, QSize, QTimer, QRectF
-from PyQt5.QtWidgets import (
-    QHBoxLayout, QVBoxLayout, QStackedWidget, QMenu, QInputDialog, QListWidgetItem,
-    QFileDialog, QMessageBox, QLabel, QWidget, QApplication
-    )
-import sys
-from qfluentwidgets import RoundMenu, Action, FluentIcon as FIF, MenuAnimationType
-import os
-import platform
-import winreg  # 仅在 Windows 上有效
-from qfluentwidgets import NavigationInterface, NavigationItemPosition, FluentIcon as FIF, setTheme, Theme, \
-    PrimaryPushButton, setThemeColor, SearchLineEdit, MessageBox, PushButton, InfoBar, InfoBarPosition
-from qframelesswindow import FramelessWindow, TitleBar
 from functools import partial
 import os, shutil
-from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction
+import sys
+import platform
+import winreg  # 仅在 Windows 上有效
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-
+from PyQt5.QtWidgets import (
+    QHBoxLayout, QStackedWidget, QInputDialog,
+    QFileDialog, QApplication, QSystemTrayIcon, QMenu, QAction
+    )
+from qfluentwidgets import NavigationInterface, NavigationItemPosition, setTheme, Theme, \
+    setThemeColor, MessageBox, InfoBar, InfoBarPosition, RoundMenu, Action, FluentIcon as FIF, \
+    MenuAnimationType
+from qframelesswindow import FramelessWindow
 
 from .EmojiPage import EmojiPage
 from .SettingsPage import SettingPage
 from core.EmojiDB import EmojiDB, EMOJI_DIR
 from core.LoadSettings import cfg
-from .MainWindows_Interface import HotkeyListener, CustomTitleBar, AvatarWidget ,AddEmojiGroupDialog
-
+from .MainWindows_Interface import HotkeyListener, CustomTitleBar, AvatarWidget, AddEmojiGroupDialog
 
 
 # ----------------- EmojiManager -----------------
@@ -58,8 +53,6 @@ class EmojiManager(FramelessWindow):
         if cfg.get(cfg.Hotkey):
             self.hotkey_thread.trigger.connect(self.show_window)
         self.hotkey_thread.start()
-
-
 
     # ---------------- 窗口属性 ----------------
     def init_window(self):
@@ -201,7 +194,7 @@ class EmojiManager(FramelessWindow):
                 self.pages[0].load_emojis()
 
         except Exception as e:
-            w = MessageBox("错误", f"删除分组失败: {e}",self)
+            w = MessageBox("错误", f"删除分组失败: {e}", self)
             w.exec()
 
     def search_emojis(self):
@@ -299,13 +292,13 @@ class EmojiManager(FramelessWindow):
         # ---------------- 添加分组 ----------------
 
     def add_group(self):
-        dialog = AddEmojiGroupDialog("请输入名称..",self)
+        dialog = AddEmojiGroupDialog("请输入名称..", self)
         if dialog.exec():
             group_name = dialog.get_text().strip()
             # 检查是否已存在
             existing_groups = self.db.get_groups_simple()  # [(id, name), ...]
             if group_name in [name for _, name in existing_groups]:
-                w = MessageBox("分组已存在", f"分组“{group_name}”已存在，请输入其他名称。",self)
+                w = MessageBox("分组已存在", f"分组“{group_name}”已存在，请输入其他名称。", self)
                 w.exec()
                 return
         else:
@@ -340,6 +333,7 @@ class EmojiManager(FramelessWindow):
         # 切换到新创建的分组页面，并选中导航
         self.switchTo(page)
         self.update_nav_selection(avatar_widget)
+
     # ------添加表情-----
     def add_emoji(self, file_path=None):
         try:
@@ -380,7 +374,7 @@ class EmojiManager(FramelessWindow):
 
 
         except Exception as e:
-            MessageBox("错误", f"添加表情时出错：{str(e)}",self).exec()
+            MessageBox("错误", f"添加表情时出错：{str(e)}", self).exec()
 
     def apply_settings(self, key, value):
         if key == "ThemeColor":
@@ -388,7 +382,6 @@ class EmojiManager(FramelessWindow):
         elif key == "Automatic_Startup":
             self.set_autostart(value)
         self.settings_saved()
-
 
     def apply_theme_color(self, color):
         """立即更新主题颜色"""
@@ -412,7 +405,7 @@ class EmojiManager(FramelessWindow):
                         except FileNotFoundError:
                             pass
             except Exception as e:
-                MessageBox("错误", f"设置开机自启失败: {e}",self).exec()
+                MessageBox("错误", f"设置开机自启失败: {e}", self).exec()
 
         elif platform.system() == "Darwin":
             # macOS 使用 LaunchAgents
@@ -462,7 +455,6 @@ class EmojiManager(FramelessWindow):
             "感谢您的使用！", self
             )
         w.exec()
-
 
     # -----后台运行-----
 

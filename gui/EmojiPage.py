@@ -1,14 +1,11 @@
 from PyQt5.QtCore import QTimer
-from qfluentwidgets import RoundMenu, Action, MenuAnimationType, FluentIcon as FIF
-from functools import partial
-from qfluentwidgets import StateToolTip, ScrollBar
-from PyQt5.QtGui import QDrag, QPixmap, QMouseEvent, QPainter
-from PyQt5.QtCore import Qt, QMimeData, QPoint
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QMenu, QApplication
-from PyQt5.QtGui import QPixmap, QMovie, QPainter, QPen, QColor, QFont, QImage
-from PyQt5.QtCore import Qt, QSize, QEvent, QMimeData, QUrl
+from qfluentwidgets import RoundMenu, Action, MenuAnimationType, FluentIcon as FIF, StateToolTip
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QApplication
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QSize, QMimeData, QUrl
 import tempfile, shutil, os
 from functools import partial
+
 from core.EmojiDB import EmojiDB
 from core.LoadSettings import cfg
 from .EmojiPage_Interface import EmojiItemWidget, RenameEmojiDialog, EmojiListWidget, DeleteArea

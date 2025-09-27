@@ -1,6 +1,6 @@
 import os
 from qfluentwidgets import (
-    qconfig, QConfig, ConfigItem, ColorConfigItem, OptionsConfigItem, OptionsValidator, RangeConfigItem, RangeValidator, FolderValidator, ColorValidator, BoolValidator
+    qconfig, QConfig, ConfigItem, ColorConfigItem, BoolValidator
     )
 
 
