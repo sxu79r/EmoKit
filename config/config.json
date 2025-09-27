@@ -1,0 +1,19 @@
+{
+    "Windows": {
+        "Automatic_Startup": false,
+        ",ThemeColor": "#ff0648cb",
+        "Tray": false,
+        "Hotkey": false
+    },
+    "Emoji": {
+        "DB_Path": "./emojis.db",
+        "Save_Path": "./emojis"
+    },
+    "Software": {
+        "Vision": "v0.5.0"
+    },
+    "QFluentWidgets": {
+        "ThemeColor": "#ff0648cb",
+        "ThemeMode": "Light"
+    }
+}
