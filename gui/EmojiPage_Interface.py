@@ -14,19 +14,17 @@ class RenameEmojiDialog(MessageBoxBase):
         super().__init__(parent)
         self.titleLabel = SubtitleLabel("更改名称", self)
         self.inputLineEdit = LineEdit(self)
-        self.inputLineEdit.setText(old_name)  # 设置初始文本
+        self.inputLineEdit.setText(old_name)
         self.inputLineEdit.setClearButtonEnabled(True)
 
         self.warningLabel = CaptionLabel("名称不能为空")
         self.warningLabel.setTextColor("#cf1010", QColor(255, 28, 32))
         self.warningLabel.hide()
 
-        # 将控件加入布局
         self.viewLayout.addWidget(self.titleLabel)
         self.viewLayout.addWidget(self.inputLineEdit)
         self.viewLayout.addWidget(self.warningLabel)
 
-        # 修改按钮文本
         self.yesButton.setText("确定")
         self.cancelButton.setText("取消")
 
@@ -49,7 +47,7 @@ class EmojiListWidget(QListWidget):
         super().__init__(parent)
         self.setAcceptDrops(True)
         self.setDragEnabled(True)
-        self.setDragDropMode(QListWidget.InternalMove)  # 内部拖动管理 item
+        self.setDragDropMode(QListWidget.InternalMove)
         self.setDefaultDropAction(Qt.MoveAction)
         self.setDropIndicatorShown(True)
 
@@ -71,7 +69,6 @@ class EmojiListWidget(QListWidget):
         if not widget:
             return
 
-        # QDrag 仅用于显示拖动效果
         drag = QDrag(self)
         mime = QMimeData()
         mime.setText(widget.path)
@@ -140,21 +137,20 @@ class EmojiItemWidget(QWidget):
 
         self.dpr = self.devicePixelRatioF()
         self.size = int(self.base_size * self.dpr)
-        self.start_pos = None  # 记录鼠标按下位置
+        self.start_pos = None
         self.label = QLabel()
         self.label.setFixedSize(self.base_size, self.base_size)
         self.label.setAlignment(Qt.AlignCenter)
-        self.setMinimumSize(80, 100)  # 图片80 + 文字30 + 间距5~10
+        self.setMinimumSize(80, 100)
         self.setMaximumSize(80, 100)
-        # 名称控件
+
         self.text_label = QLabel(text)
         self.text_label.setAlignment(Qt.AlignCenter)
         self.text_label.setStyleSheet("color: black; font-size: 10pt;font-family: '微软雅黑';")
-        self.text_label.setWordWrap(True)  # 防止文字太长溢出
-        self.text_label.setFixedHeight(20)  # 保证有空间显示
-        self.text_label.setVisible(False)  # 默认编辑模式隐藏
+        self.text_label.setWordWrap(True)
+        self.text_label.setFixedHeight(20)
+        self.text_label.setVisible(False)
 
-        # 垂直布局：图片在上，名称在下
         layout = QVBoxLayout(self)
         layout.addWidget(self.label, alignment=Qt.AlignCenter)
         layout.addWidget(self.text_label, alignment=Qt.AlignCenter)
@@ -163,7 +159,7 @@ class EmojiItemWidget(QWidget):
 
         self.load_image(self.path)
 
-        # **启用鼠标跟踪，无论是否 GIF**
+
         self.setMouseTracking(True)
         self.label.setMouseTracking(True)
 
@@ -178,7 +174,7 @@ class EmojiItemWidget(QWidget):
         self.label.setPixmap(
             self.avatar.scaled(self.base_size, self.base_size, Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
-        # GIF 复制到临时文件
+
         if self.is_gif:
             temp_dir = tempfile.gettempdir()
             self.temp_gif_path = os.path.join(temp_dir, os.path.basename(path))
@@ -220,7 +216,7 @@ class EmojiItemWidget(QWidget):
             while parent_page and not hasattr(parent_page, "delete_emoji"):
                 parent_page = parent_page.parent()
 
-            # 👉 普通单击只做选中逻辑（无论是否编辑模式）
+
             if hasattr(parent_page, "clear_selection"):
                 parent_page.clear_selection()
             self.setSelected(True)
@@ -247,19 +243,19 @@ class EmojiItemWidget(QWidget):
     def mouseDoubleClickEvent(self, event):
         if event.button() == Qt.LeftButton:
             parent_page = self.parent()
-            # 找到包含 delete_emoji 方法的父页面（EmojiPage）
+
             while parent_page and not hasattr(parent_page, "delete_emoji"):
                 parent_page = parent_page.parent()
 
             if parent_page and getattr(parent_page, "edit_mode", False):
-                # 使用 Fluent 风格对话框重命名
+
 
                 dialog = RenameEmojiDialog(self.text_label.text(), parent_page)
                 if dialog.exec():
                     new_name = dialog.get_text()
                     if new_name:
                         self.text_label.setText(new_name)
-                        # 更新数据库
+
                         eid = None
                         for i in range(parent_page.list_widget.count()):
                             item = parent_page.list_widget.item(i)

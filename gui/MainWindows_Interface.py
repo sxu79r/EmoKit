@@ -17,7 +17,7 @@ class AddEmojiGroupDialog(MessageBoxBase):
         super().__init__(parent)
         self.titleLabel = SubtitleLabel("添加分组", self)
         self.inputLineEdit = LineEdit(self)
-        self.inputLineEdit.setPlaceholderText(old_name)  # 设置初始文本
+        self.inputLineEdit.setPlaceholderText(old_name)
         self.inputLineEdit.setClearButtonEnabled(True)
 
         self.warningLabel = CaptionLabel("名称不能为空")
@@ -47,7 +47,6 @@ class AddEmojiGroupDialog(MessageBoxBase):
         return self.inputLineEdit.text().strip()
 
 
-# 线程监听全局快捷键
 
 class HotkeyListener(QThread):
     trigger = pyqtSignal()
@@ -68,8 +67,8 @@ class AvatarWidget(NavigationWidget):
         self.text = f'分组:{text}'
         self.avatar_path = image_path or ''
         self.avatar = QImage(self.avatar_path).scaled(32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.selected = False  # 新增选中状态
-        self.page = page  # 绑定页面
+        self.selected = False
+        self.page = page
 
     def setAvatar(self, path):
         self.avatar_path = path
@@ -78,35 +77,31 @@ class AvatarWidget(NavigationWidget):
 
     def setSelected(self, selected: bool):
         self.selected = selected
-        self.update()  # 刷新绘制
+        self.update()
 
     def paintEvent(self, e):
         painter = QPainter(self)
         painter.setRenderHints(QPainter.SmoothPixmapTransform | QPainter.Antialiasing)
         painter.setPen(Qt.NoPen)
 
-        # 选中背景
         if getattr(self, 'selected', False):
-            painter.setBrush(QColor(230, 230, 230))  # 浅青色半透明
+            painter.setBrush(QColor(230, 230, 230))
             painter.drawRoundedRect(self.rect(), 5, 5)
             bar_width = 3
-            bar_color = QColor(164, 170, 255)  # 黑色条子
-            radius = 2  # 圆角半径
+            bar_color = QColor(164, 170, 255)
+            radius = 2
             painter.setBrush(bar_color)
             painter.drawRoundedRect(0, 10, bar_width, self.height() - 20, radius, radius)
 
-        # 鼠标悬停效果
         if getattr(self, 'isEnter', False):
             painter.setBrush(QColor(255, 255, 255, 30))
             painter.drawRoundedRect(self.rect(), 5, 5)
 
-        # 绘制头像
         painter.setBrush(QBrush(self.avatar))
         painter.translate(8, 6)
         painter.drawEllipse(0, 0, self.avatar.width(), self.avatar.height())
         painter.translate(-8, -6)
 
-        # 绘制文字
         if not getattr(self, 'isCompacted', False):
             painter.setPen(Qt.black)
             font = QFont('Microsoft YaHei')
@@ -123,32 +118,27 @@ class CustomTitleBar(TitleBar):
         super().__init__(parent)
         self.setFixedHeight(40)
 
-        # 移除默认按钮
         self.hBoxLayout.removeWidget(self.minBtn)
         self.hBoxLayout.removeWidget(self.maxBtn)
         self.hBoxLayout.removeWidget(self.closeBtn)
 
-        # 窗口图标
         self.iconLabel = QLabel(self)
         self.iconLabel.setFixedSize(24, 24)
         self.hBoxLayout.insertSpacing(0, 40)
         self.hBoxLayout.insertWidget(1, self.iconLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
         self.window().windowIconChanged.connect(self.setIcon)
 
-        # 窗口标题
         self.titleLabel = QLabel(self)
         self.hBoxLayout.insertWidget(2, self.titleLabel, 0, Qt.AlignLeft | Qt.AlignVCenter)
         self.titleLabel.setObjectName('titleLabel')
         self.window().windowTitleChanged.connect(self.setTitle)
 
-        # 搜索框
         self.searchLineEdit = SearchLineEdit(self)
         self.searchLineEdit.setPlaceholderText('搜索组内表情包...')
         self.searchLineEdit.setFixedSize(210, 30)
         self.searchLineEdit.setClearButtonEnabled(True)
         self.searchLineEdit.textChanged.connect(self.on_search_text_changed)
 
-        # 编辑模式按钮
         self.editModeBtn = PrimaryPushButton("编辑", self)
         self.editModeBtn.setIcon(FIF.PENCIL_INK)
         self.editModeBtn.setCheckable(True)
@@ -161,13 +151,10 @@ class CustomTitleBar(TitleBar):
         centerLayout.setContentsMargins(0, 0, 0, 0)
         centerLayout.addWidget(self.searchLineEdit)
         centerLayout.addWidget(self.editModeBtn)
-        centerLayout.addStretch(1)  # 可选，保证按钮不贴在搜索框右边
         self.centerWidget = QWidget(self)
         self.centerWidget.setLayout(centerLayout)
         self.centerWidget.setFixedHeight(40)
-        self.hBoxLayout.addStretch(1)  # 左边占位
         self.hBoxLayout.addWidget(self.centerWidget, 0, Qt.AlignCenter)
-        self.hBoxLayout.addStretch(1)  # 右边占位
 
         # ---------------- 右侧窗口控制按钮 ----------------
         self.rightButtonLayout = QHBoxLayout()
@@ -188,14 +175,12 @@ class CustomTitleBar(TitleBar):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        # 居中 centerWidget
         container_width = self.centerWidget.width()
         container_height = self.centerWidget.height()
         new_x = (self.width() - container_width) // 2
         new_y = (self.height() - container_height) // 2
         self.centerWidget.move(new_x, new_y)
 
-    # 搜索框文字变动
     def on_search_text_changed(self, text: str):
         parent = self.parent()
         if parent and hasattr(parent, "stackWidget"):

@@ -28,7 +28,6 @@ class EmojiDB():
         conn.commit()
         conn.close()
 
-        # 🔥 初始化时检查表情包文件是否存在
         self._cleanup_invalid_emojis()
 
     def _cleanup_invalid_emojis(self):
@@ -87,17 +86,16 @@ class EmojiDB():
             conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
 
-            # 获取文件路径
+
             c.execute("SELECT image_path FROM emojis WHERE id=?", (eid,))
             row = c.fetchone()
             path = row[0] if row else None
 
-            # 删除数据库记录
             c.execute("DELETE FROM emojis WHERE id=?", (eid,))
             conn.commit()
             conn.close()
 
-            # 删除本地文件
+
             if path and os.path.exists(path):
                 try:
                     os.remove(path)

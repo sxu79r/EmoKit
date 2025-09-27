@@ -8,34 +8,27 @@ from qfluentwidgets import (
 from PyQt5.QtCore import Qt, pyqtSignal, QUrl
 from PyQt5.QtGui import QDesktopServices
 
-from core.LoadSettings import cfg  # 你写的Config类
+from core.LoadSettings import cfg
 
 
 class SettingPage(ScrollArea):
     about_us_signal = pyqtSignal()
-    settings_changed = pyqtSignal(str, object)  # key, value
+    settings_changed = pyqtSignal(str, object)
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
-        # 去掉 ScrollArea 边框
         self.setFrameShape(self.NoFrame)
         self.setFrameShadow(self.Plain)
         self.setStyleSheet("border: none; background-color: rgba(230,230,230);")
 
-        # 内部容器
         self.scrollWidget = QWidget()
         self.setWidget(self.scrollWidget)
         self.setWidgetResizable(True)
 
-        # 主布局
         self.vbox = QVBoxLayout(self.scrollWidget)
 
-        # 整体下移距离，与标题保持间距
-        top_spacing = QWidget()
-
-        # 左右和底部边距
         self.vbox.setContentsMargins(20, 0, 20, 20)
-        self.vbox.setSpacing(10)  # 组之间间距
+        self.vbox.setSpacing(10)
         self.__initPathSettings()
         self.__initWindowSettings()
         self.__initUpdateSettings()
@@ -58,18 +51,16 @@ class SettingPage(ScrollArea):
     def __initPathSettings(self):
         pathGroup = SettingCardGroup("路径设置", self.scrollWidget)
 
-        # 表情保存路径卡片（仅查看）
         self.emojiPathCard = PushSettingCard(
             "表情保存路径",
             FIF.SAVE_AS,
             "点击打开所在目录",
-            cfg.EmojiSaved_Path.value,  # 如果你想显示初始值，可以用 .value
+            cfg.EmojiSaved_Path.value,
             parent=pathGroup
             )
 
         self.emojiPathCard.clicked.connect(self.__openEmojiPath)
 
-        # 数据库路径卡片（仅查看）
         self.dbPathCard = PushSettingCard(
             "数据库路径",
             FIF.FOLDER,
@@ -131,7 +122,7 @@ class SettingPage(ScrollArea):
             )
 
         self.themeColorCard = ColorSettingCard(
-            cfg.ThemeColor,  # 直接传对象
+            cfg.ThemeColor,
             FIF.BRUSH,
             "主题颜色",
             "自定义界面主题颜色",
@@ -142,7 +133,7 @@ class SettingPage(ScrollArea):
             FIF.UNIT,
             "启用窗口快捷键",
             f"快捷键: Shift+Ctrl+E",
-            configItem=cfg.Hotkey,  # 直接传对象
+            configItem=cfg.Hotkey,
             parent=windowGroup
             )
 
@@ -174,7 +165,7 @@ class SettingPage(ScrollArea):
         aboutGroup.addSettingCard(self.feedbackCard)
         self.about_card.clicked.connect(self.show_about_us)
         self.feedbackCard.clicked.connect(
-            lambda: QDesktopServices.openUrl(QUrl('https://github.com/sxu79r/EchoBi-B-GUI-/issues')))
+            lambda: QDesktopServices.openUrl(QUrl('https://github.com/sxu79r/EmoKit/issues')))
         self.vbox.addWidget(aboutGroup)
 
     def show_about_us(self):
